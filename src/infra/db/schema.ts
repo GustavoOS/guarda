@@ -12,6 +12,8 @@ export const filesTable = sqliteTable("files_table", {
     id: int().primaryKey({ autoIncrement: true }),
     blobName: text().notNull(),
     originalName: text().notNull(),
-    createdBy: int().notNull().references(() => usersTable.id),
-    createdAt: text().default(sql`(CURRENT_TIMESTAMP)`)
+    mimeType: text().notNull(),
+    uploadedBy: int().notNull().references(() => usersTable.id),
+    uploadedAt: text().default(sql`(CURRENT_TIMESTAMP)`),
+    createdAt: text().notNull()
 });

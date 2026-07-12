@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import filesController from './controller/files'
+import filesController from './controllers/files.route'
 
 const app = new Hono()
 
