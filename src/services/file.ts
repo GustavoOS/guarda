@@ -1,4 +1,4 @@
-import { and, asc, eq, gt } from "drizzle-orm";
+import { and, asc, desc, eq, gt, lt } from "drizzle-orm";
 import { db } from "../infra/db";
 import { filesTable } from "../infra/db/schema";
 import { s3Client } from "../infra/s3";
@@ -31,15 +31,37 @@ export async function createFile({
 	});
 }
 
-export async function findFiles({ cursor, size, userId }: { cursor?: number; size: number; userId: number }) {
-    const cursorCondition = cursor ? gt(filesTable.id, cursor) : undefined;
-		const whereCondition = cursorCondition
-			? and(eq(filesTable.uploadedBy, userId), cursorCondition)
-			: eq(filesTable.uploadedBy, userId);
-		return await db
-			.select()
-			.from(filesTable)
-			.where(whereCondition)
-			.orderBy(asc(filesTable.id))
-			.limit(size);
+const sortMap = {
+	asc,
+	desc,
+};
+const sortOperation = {
+	asc: gt,
+	desc: lt,
+};
+export async function findFiles({
+	cursor,
+	size,
+	userId,
+	sortBy,
+	sortOrder,
+}: {
+	cursor?: number;
+	size: number;
+	userId: number;
+	sortBy: "createdAt" | "id";
+	sortOrder: "asc" | "desc";
+}) {
+	const cursorCondition = cursor
+		? sortOperation[sortOrder](filesTable.id, cursor)
+		: undefined;
+	const whereCondition = cursorCondition
+		? and(eq(filesTable.uploadedBy, userId), cursorCondition)
+		: eq(filesTable.uploadedBy, userId);
+	return await db
+		.select()
+		.from(filesTable)
+		.where(whereCondition)
+		.orderBy(sortMap[sortOrder](filesTable[sortBy]))
+		.limit(size);
 }
