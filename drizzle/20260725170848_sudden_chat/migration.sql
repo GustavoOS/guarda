@@ -5,6 +5,8 @@ CREATE TABLE `files_table` (
 	`mimeType` text NOT NULL,
 	`uploadedBy` integer NOT NULL,
 	`uploadedAt` text DEFAULT (CURRENT_TIMESTAMP),
+	`uploadedCompletedAt` text,
+	`coordinates` text,
 	`createdAt` text NOT NULL,
 	CONSTRAINT `fk_files_table_uploadedBy_users_table_id_fk` FOREIGN KEY (`uploadedBy`) REFERENCES `users_table`(`id`)
 );

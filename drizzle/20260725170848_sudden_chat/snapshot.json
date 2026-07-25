@@ -1,7 +1,7 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "c5a7ab2f-bd5a-483f-a25c-a9009eee22bd",
+  "id": "7026f113-c52c-4d23-8f2f-3be11c2da3e2",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -71,6 +71,26 @@
       "default": "(CURRENT_TIMESTAMP)",
       "generated": null,
       "name": "uploadedAt",
+      "entityType": "columns",
+      "table": "files_table"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "uploadedCompletedAt",
+      "entityType": "columns",
+      "table": "files_table"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "coordinates",
       "entityType": "columns",
       "table": "files_table"
     },

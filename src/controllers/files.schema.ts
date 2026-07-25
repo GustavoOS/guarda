@@ -1,4 +1,5 @@
 import z from "zod";
+import { pointSchema } from "../util/geojson.schema";
 import { zMime } from "../util/mime.schema";
 
 export const createFileSchema = z.object({
@@ -8,6 +9,7 @@ export const createFileSchema = z.object({
 		.max(255, { message: "File name must be less than 255 characters" }),
 	mimeType: zMime,
 	createdAt: z.iso.datetime(),
+	coordinates: pointSchema.optional(),
 });
 
 export const getFileSchema = z.object({
