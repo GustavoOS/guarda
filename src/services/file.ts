@@ -76,7 +76,7 @@ export async function findFiles({
 		preview: s3Client.presign(`${file.blobName}-min-80`, {
 			method: "GET",
 			expiresIn: DEFAULT_EXPIRES_IN,
-			type: file.mimeType,
+			type: "image/webp",
 		}),
 	}));
 }
