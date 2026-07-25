@@ -2,10 +2,18 @@ services:
   seaweedfs:
     image: chrislusf/seaweedfs
     container_name: S3_SeaweedFS
+    # Run master + volume + filer + S3 in a single process.
+    # The filer is required for webhook notifications.
+    command: server -s3 -filer -dir=/data
     ports:
-      - "8333:8333"
+      - "8333:8333"   # S3 API
+      - "8888:8888"   # Filer HTTP
+      - "9333:9333"   # Master
+      - "8080:8080"   # Volume
     volumes:
       - ./data:/data
+      # SeaweedFS reads notification config from /etc/seaweedfs/notification.toml
+      - ./notification.toml:/etc/seaweedfs/notification.toml:ro
     environment:
       AWS_ACCESS_KEY_ID: admin
       AWS_SECRET_ACCESS_KEY: secret

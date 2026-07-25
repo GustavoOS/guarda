@@ -16,7 +16,7 @@ export const filesTable = sqliteTable("files_table", {
     mimeType: text().notNull(),
     uploadedBy: int().notNull().references(() => usersTable.id),
     uploadedAt: text().default(sql`(CURRENT_TIMESTAMP)`),
-    uploadedCompletedAt: text(),
+    uploadCompletedAt: text(),
     coordinates: text({mode: "json"}).$type<Point>(),
     createdAt: text().notNull()
 });

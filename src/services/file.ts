@@ -2,7 +2,7 @@ import { and, asc, desc, eq, gt, isNotNull, lt } from "drizzle-orm";
 import type { Point } from "geojson";
 import { db } from "../infra/db";
 import { filesTable } from "../infra/db/schema";
-import { s3Client } from "../infra/s3";
+import { DEFAULT_EXPIRES_IN, s3Client } from "../infra/s3";
 
 export async function createFile({
 	filename,
@@ -29,7 +29,7 @@ export async function createFile({
 		});
 		const url = s3Client.presign(blobName, {
 			method: "PUT",
-			expiresIn: 3600,
+			expiresIn: DEFAULT_EXPIRES_IN,
 		});
 		return { blobName, url };
 	});
@@ -59,16 +59,37 @@ export async function findFiles({
 	const cursorCondition = cursor
 		? sortOperation[sortOrder](filesTable.id, cursor)
 		: undefined;
-	return await db
+	const result = await db
 		.select()
 		.from(filesTable)
 		.where(
 			and(
 				eq(filesTable.uploadedBy, userId),
-				isNotNull(filesTable.uploadedCompletedAt),
+				isNotNull(filesTable.uploadCompletedAt),
 				cursorCondition,
 			),
 		)
 		.orderBy(sortMap[sortOrder](filesTable[sortBy]))
 		.limit(size);
+	return result.map((file) => ({
+		...file,
+		preview: s3Client.presign(`${file.blobName}-min-80`, {
+			method: "GET",
+			expiresIn: DEFAULT_EXPIRES_IN,
+			type: file.mimeType,
+		}),
+	}));
+}
+
+export async function completeUpload({
+	uploadCompletedAt,
+	name,
+}: {
+	uploadCompletedAt: Date;
+	name: string;
+}) {
+	return db
+		.update(filesTable)
+		.set({ uploadCompletedAt: uploadCompletedAt.toISOString() })
+		.where(eq(filesTable.blobName, name));
 }

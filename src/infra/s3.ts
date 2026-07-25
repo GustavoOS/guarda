@@ -1,8 +1,11 @@
 import { S3Client } from "bun";
 
 export const s3Client = new S3Client({
-    accessKeyId: Bun.env.S3_ACCESS_KEY_ID,
-    secretAccessKey: Bun.env.S3_SECRET_ACCESS_KEY,
-    endpoint: Bun.env.S3_ENDPOINT,
-    bucket: Bun.env.S3_BUCKET_NAME,
-})
+	accessKeyId: Bun.env.S3_ACCESS_KEY_ID,
+	secretAccessKey: Bun.env.S3_SECRET_ACCESS_KEY,
+	endpoint: Bun.env.S3_ENDPOINT,
+	bucket: Bun.env.S3_BUCKET_NAME,
+	region: Bun.env.S3_REGION ?? "us-east-1",
+});
+
+export const DEFAULT_EXPIRES_IN = 3600; // 1 hour in seconds

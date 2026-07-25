@@ -1,7 +1,7 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "7026f113-c52c-4d23-8f2f-3be11c2da3e2",
+  "id": "67c3ae5f-8202-40e4-96f2-bfadf37817bf",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -80,7 +80,7 @@
       "autoincrement": false,
       "default": null,
       "generated": null,
-      "name": "uploadedCompletedAt",
+      "name": "uploadCompletedAt",
       "entityType": "columns",
       "table": "files_table"
     },
