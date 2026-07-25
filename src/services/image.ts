@@ -8,19 +8,20 @@ export async function optimizeImage({
 	name: string;
 	mime?: string;
 }) {
-    if(!mime?.startsWith("image/")) {
-        console.log(`File ${name} is not an image, skipping optimization. Mime type: ${mime}`);
-        return;
-    }
-	if (name.match(/min-\d+$/)) {
+    console.log("Optimizing image:", { name, mime });
+    if (name.match(/min-\d+$/)) {
 		console.log(`Image ${name} is already optimized, skipping optimization.`);
 		return;
 	}
+    if(!mime?.startsWith("image/")) {
+        console.log(`File ${name} might not be an image, skipping optimization. Mime type: ${mime}`);
+        return;
+    }	
     const file = s3Client.file(name);
     const buffer = await file.arrayBuffer();
     const optimized = await sharp(buffer)
         .webp({ quality: 80 })
         .toBuffer();
-    s3Client.write(`${name}-min-80`, optimized)
-    console.log(`Image ${name} optimized and saved as ${name}-min-80`);
+    await s3Client.write(`${name}-min-80`, optimized, {type: "image/webp"});
+    console.log("Image optimized and saved", { name, optimizedName: `${name}-min-80` });
 }
