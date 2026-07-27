@@ -33,6 +33,7 @@ async function createSeaweedWebhookHandler(
 				req.message.new_entry.attributes.mtime,
 			),
 			name: req.message.new_entry.name,
+			mimeType: req.message.new_entry.attributes.mime,
 		});
 }
 
@@ -50,6 +51,7 @@ async function updateSeaweedWebhookHandler(
 				req.message.new_entry.attributes.mtime,
 			),
 			name: req.message.new_entry.name,
+			mimeType: req.message.new_entry.attributes.mime,
 		});
 }
 

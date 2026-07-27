@@ -13,7 +13,7 @@ export const filesTable = sqliteTable("files_table", {
     id: int().primaryKey({ autoIncrement: true }),
     blobName: text().notNull(),
     originalName: text().notNull(),
-    mimeType: text().notNull(),
+    mimeType: text(),
     uploadedBy: int().notNull().references(() => usersTable.id),
     uploadedAt: text().default(sql`(CURRENT_TIMESTAMP)`),
     uploadCompletedAt: text(),

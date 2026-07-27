@@ -6,13 +6,11 @@ import { DEFAULT_EXPIRES_IN, s3Client } from "../infra/s3";
 
 export async function createFile({
 	filename,
-	mimeType,
 	createdAt,
 	userId,
 	coordinates,
 }: {
 	filename: string;
-	mimeType: string;
 	createdAt: string;
 	userId: number;
 	coordinates?: Point;
@@ -22,7 +20,6 @@ export async function createFile({
 		await tx.insert(filesTable).values({
 			blobName,
 			originalName: filename,
-			mimeType: mimeType,
 			uploadedBy: userId,
 			createdAt,
 			coordinates,
@@ -83,13 +80,15 @@ export async function findFiles({
 
 export async function completeUpload({
 	uploadCompletedAt,
+	mimeType,
 	name,
 }: {
 	uploadCompletedAt: Date;
 	name: string;
+	mimeType?: string;
 }) {
 	return db
 		.update(filesTable)
-		.set({ uploadCompletedAt: uploadCompletedAt.toISOString() })
+		.set({ uploadCompletedAt: uploadCompletedAt.toISOString(), mimeType })
 		.where(eq(filesTable.blobName, name));
 }
