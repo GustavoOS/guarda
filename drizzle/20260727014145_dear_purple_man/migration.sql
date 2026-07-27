@@ -2,7 +2,7 @@ CREATE TABLE `files_table` (
 	`id` integer PRIMARY KEY AUTOINCREMENT,
 	`blobName` text NOT NULL,
 	`originalName` text NOT NULL,
-	`mimeType` text NOT NULL,
+	`mimeType` text,
 	`uploadedBy` integer NOT NULL,
 	`uploadedAt` text DEFAULT (CURRENT_TIMESTAMP),
 	`uploadCompletedAt` text,
