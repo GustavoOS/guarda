@@ -1,19 +1,22 @@
+import type { S3Client } from "bun";
 import { and, asc, desc, eq, gt, isNotNull, lt } from "drizzle-orm";
 import type { Point } from "geojson";
 import { db } from "../infra/db";
 import { filesTable } from "../infra/db/schema";
-import { DEFAULT_EXPIRES_IN, s3Client } from "../infra/s3";
+import { DEFAULT_EXPIRES_IN } from "../infra/s3";
 
 export async function createFile({
 	filename,
 	createdAt,
 	userId,
 	coordinates,
+	s3Client,
 }: {
 	filename: string;
 	createdAt: string;
 	userId: number;
 	coordinates?: Point;
+	s3Client: S3Client;
 }) {
 	const blobName = Bun.randomUUIDv7();
 	return await db.transaction(async (tx) => {
@@ -46,12 +49,14 @@ export async function findFiles({
 	userId,
 	sortBy,
 	sortOrder,
+	s3Client,
 }: {
 	cursor?: number;
 	size: number;
 	userId: number;
 	sortBy: "createdAt" | "id";
 	sortOrder: "asc" | "desc";
+	s3Client: S3Client;
 }) {
 	const cursorCondition = cursor
 		? sortOperation[sortOrder](filesTable.id, cursor)

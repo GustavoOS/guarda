@@ -1,11 +1,11 @@
-To install dependencies:
-```sh
-bun install
-```
+# Guarda
 
-To run:
-```sh
-bun run dev
-```
+Guarda is a self hosted project designed to allow you to own your pictures.
+Guarda uses a S3 compatible API Seaweed FS (open source) and a local SQLite database.
 
-open http://localhost:3000
+## Install dependencies
+`bun install` to install code dependencies
+`podman compose up` or `docker compose up` to install container dependencies
+
+## Running dev
+`bun dev`
